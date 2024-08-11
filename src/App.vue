@@ -49,40 +49,44 @@
   }
 
   const signUp = async () => {
+    let flag = true
     if(account.value == password.value || account.value == nickname.value || password.value == nickname.value){
+      flag = false
       Swal.fire({
         title: "註冊失敗",
         text: "帳號、密碼或暱稱不能相同",
         icon: "error"
       })
-      .then(()=>{
+      setTimeout(()=>{
         window.location.reload();
-      })
+      }, 1000)
     }
 
     if(validator.isEmail(account.value)){
+      flag = false
       Swal.fire({
         title: "註冊失敗",
         text: "帳號格式不符",
         icon: "error"
       })
-      .then(()=>{
+      setTimeout(()=>{
         window.location.reload();
-      })
+      }, 1000)
     }
 
     if(checkPasswordStrength(password.value)<4){
+      flag = false
       Swal.fire({
         title: "註冊失敗",
         text: "密碼至少包含數字、英文大小寫、特殊符號",
         icon: "error"
       })
-      .then(()=>{
+      setTimeout(()=>{
         window.location.reload();
-      })
+      }, 1000)
     }
 
-    if(account.value && password.value && nickname.value){
+    if(account.value && password.value && nickname.value && flag){
         await axios.post(`${url}/users/sign_up`,{
           email: account.value,
           password: password.value,
@@ -95,14 +99,18 @@
               text: "恭喜您註冊成功",
               icon: "success"
             })
-            window.location.reload();  
+            setTimeout(()=>{
+              window.location.reload();
+            }, 1000)  
           }else{
             Swal.fire({
               title: "註冊失敗",
               text: "註冊失敗",
               icon: "error"
             })
-            window.location.reload();
+            setTimeout(()=>{
+              window.location.reload();
+            }, 1000)
           }
         })
         .catch((error) => {
@@ -114,7 +122,9 @@
         text: "資料不得為空",
         icon: "warning"
       })
-      window.location.reload();          
+      setTimeout(()=>{
+        window.location.reload();
+      }, 1000)          
     }
   }
 
@@ -133,17 +143,19 @@
           Swal.fire({
             title: "登入成功",
             icon: "success"
-          }).then((result) => {
+          })
+          setTimeout(()=>{
             window.location.reload();
-          }); 
+          }, 1000)
         }else{
           Swal.fire({
             title: "登入失敗",
             text: "請重新登入",
             icon: "error"
-          }).then((result) => {
+          })
+          setTimeout(()=>{
             window.location.reload();
-          }); 
+          }, 1000)
         }
       })
       .catch(error => {
@@ -154,9 +166,10 @@
         title: "輸入錯誤",
         text: "資料不得為空",
         icon: "warning"
-      }).then((result) => {
+      })
+      setTimeout(()=>{
         window.location.reload();
-      });
+      }, 1000)
     }
   }
 
@@ -186,9 +199,10 @@
         Swal.fire({
             title: "登出成功",
             icon: "success"
-          }).then((result) => {
+          })
+          setTimeout(()=>{
             window.location.reload();
-          }); 
+          }, 1000)
       }
     })
     .catch(err => {
@@ -228,17 +242,19 @@
           title: "新增成功",
           text: "成功新增待辦事項",
           icon: "success"
-        }).then((result) => {
+        })
+        setTimeout(()=>{
           window.location.reload();
-        }); 
+        }, 1000)
       }else{
         Swal.fire({
           title: "新增失敗",
           text: "新增待辦事項失敗",
           icon: "error"
-        }).then((result) => {
-          window.location.reload();
-        }); 
+        })
+        setTimeout(()=>{
+        window.location.reload();
+        }, 1000)
       }
     })
     .catch(error => {
@@ -258,9 +274,10 @@
           title: "更新成功",
           text: "成功更新待辦事項",
           icon: "success"
-        }).then((result) => {
+        })
+        setTimeout(()=>{
           window.location.reload();
-        }); 
+        }, 1000)
       }
     })
     .catch(err => {
@@ -291,9 +308,10 @@
                 title: "刪除成功",
                 text: "成功刪除待辦事項",
                 icon: "success"
-              }).then((result) => {
+              })
+              setTimeout(()=>{
                 window.location.reload();
-              }); 
+              }, 1000)
             }
           })
           .catch(err => {
@@ -302,8 +320,20 @@
       }
     });
   }
+
+  const expiresStatus = () => {
+    const expiresTime = new Date(getCookie('hexschoolTodo')?.split('expires=')[1])
+    const currentTime = new Date()
+    if(currentTime > expiresTime){
+      deleteCookie('hexschoolTodo')
+      setTimeout(()=>{
+        window.location.reload();
+      }, 1000)
+    }
+  }
   
   onMounted:{
+    expiresStatus()
     getCookie('hexschoolTodo')?.split('expires')[0]?isLogin.value=true:isLogin.value=false;
     getTodos();
   }
