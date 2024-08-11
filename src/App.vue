@@ -408,5 +408,5 @@
 
 .border-radius{
   border-radius: 20px;
-};
+}
 </style>
