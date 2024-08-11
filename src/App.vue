@@ -247,7 +247,6 @@
   }
 
   const updateTodo = async (todo) => {
-    console.log("todo.id", todo.id)
     await axios.put(`${url}/todos/${todo.id}`, {content:todo.content}, {
       headers: {
         Authorization: token
