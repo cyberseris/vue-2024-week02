@@ -45,7 +45,7 @@
   }
 
   const deleteCookie = (name) => {
-    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+    document.cookie = name + '= ; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/vue-2024-week02';
   }
 
   const signUp = async () => {
@@ -125,7 +125,6 @@
         password: password.value
       })
       .then(res => {
-        console.log("signIn", res.data)
         if(res.data.status){
           let date = new Date();
           date.setTime(date.getTime()+60*60*1*1000);
@@ -183,6 +182,7 @@
     })
     .then(res => {
       if(res.data.status){
+        deleteCookie('hexschoolTodo')
         Swal.fire({
             title: "登出成功",
             icon: "success"
@@ -190,8 +190,6 @@
             window.location.reload();
           }); 
       }
-
-    deleteCookie('hexschoolTodo')
     })
     .catch(err => {
       console.log("Error: ", err)
